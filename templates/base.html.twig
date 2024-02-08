@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {# commentaires #}
+    <meta charset="UTF-8">
+    <title>{% block title %}Chôme qui peut!{% endblock %}</title>
+    {{ include('commun/bootstrapJQuery.html.twig')}}
+    
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="container">
+    {{include('commun/enteteCQP.html.twig')}}
+    
+    {% block body %}
+    {% endblock %}
+    
+    {{include('commun/piedsCQP.html.twig')}}
+    </div>
+  </body>
+</html>
