@@ -17,7 +17,7 @@ class BaseController extends AbstractController
     }
 
     #[Route('/accueil')]
-    public function Accueil()
+    public function accueil()
     {
         $nom = "Patricia";
         return $this->render('accueil.html.twig', ['nom' => $nom]);
