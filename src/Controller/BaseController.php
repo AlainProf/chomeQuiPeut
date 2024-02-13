@@ -6,20 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\OffreEmploi;
+
 class BaseController extends AbstractController
 {
-    #[Route('/base', name: 'app_base')]
-    public function index(): Response
-    {
-        return $this->render('base/index.html.twig', [
-            'controller_name' => 'BaseController',
-        ]);
-    }
-
     #[Route('/accueil')]
-    public function accueil()
+    public function accueil(ManagerRegistry $doctrine)
     {
-        $nom = "Patricia";
-        return $this->render('accueil.html.twig', ['nom' => $nom]);
+        $tabOffresEmplois = $doctrine->
+                             getManager()->
+                             getRepository(OffreEmploi::class)->
+                             findAll();
+        return $this->render('accueil.html.twig', ['tabOE' => $tabOffresEmplois]);
     }
 }

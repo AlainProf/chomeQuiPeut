@@ -1,8 +1,30 @@
 {% extends('base.html.twig') %}
 
- {% block body %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('css/chomeQuiPeut.css')}}">
+{% endblock %}
 
-<h1>Bienvenue {{nom}}!</h1>
+ {% block body %}
+   <section class="row">
+    <article class="col-4 sectionGauche">
+       <h3>Liste des chômeurs</h3>
+          <ol>
+            <li>Alberto</li>
+            <li>Benjamin</li>
+            <li>Cervantes</li>
+          </ol>
+    </article>
+
+    <article class="col-8 sectionDroite">
+        <h3>Offres d'emplois</h3>
+        <ol>
+           {% for oe in tabOE %}
+              <li>{{ oe.titre }}</li>
+           {% endfor %}
+        </ol>
+    </article>
+      
+   </section>
 
  {% endblock %}
 
