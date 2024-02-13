@@ -8,11 +8,11 @@
    <section class="row">
     <article class="col-4 sectionGauche">
        <h3>Liste des chômeurs</h3>
-          <ol>
-            <li>Alberto</li>
-            <li>Benjamin</li>
-            <li>Cervantes</li>
-          </ol>
+       <ol>
+        {% for chomeur in tabChomeurs %}
+           <li>{{ chomeur.nom }}</li>
+        {% endfor %}
+     </ol>
     </article>
 
     <article class="col-8 sectionDroite">

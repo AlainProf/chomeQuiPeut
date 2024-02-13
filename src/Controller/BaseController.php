@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\OffreEmploi;
+use App\Entity\Chomeur;
 
 class BaseController extends AbstractController
 {
@@ -18,6 +19,14 @@ class BaseController extends AbstractController
                              getManager()->
                              getRepository(OffreEmploi::class)->
                              findAll();
-        return $this->render('accueil.html.twig', ['tabOE' => $tabOffresEmplois]);
+
+        $tabChomeurs = $doctrine->
+                             getManager()->
+                             getRepository(Chomeur::class)->
+                             findAll();
+
+
+
+        return $this->render('accueil.html.twig', ['tabOE' => $tabOffresEmplois, 'tabChomeurs' => $tabChomeurs]);
     }
 }
