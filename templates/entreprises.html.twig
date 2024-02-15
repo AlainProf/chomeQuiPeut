@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('css/chomeQuiPeut.css')}}">
+{% endblock %}
+
+{% block body %}
+<h1>Les entreprises inscrites</h1>
+{% for entrep in tabEntrep %}
+   <h3>{{ entrep.Nom }}</h3>
+   {% for oe in entrep.offresEmplois %}
+      <p>{{ oe.titre}}, {{ oe.salaireAnnuel }}$ /an</p>
+   {% endfor %}
+   <hr>
+{% endfor %}
+
+{% endblock %}

@@ -15,9 +15,12 @@ class EntrepriseController extends AbstractController
     #[Route('/afficherEntreprise')]
     public function afficherEntreprise(ManagerRegistry $doctrine): Response
     {
-        
+        $tabEntreprises = $doctrine->
+        getManager()->
+        getRepository(Entreprise::class)->
+        findAll();
 
-        return $this->render('entreprises.html.twig', ['tabEntrep' => $tabOffresEmplois, 'tabChomeurs' => $tabChomeurs]);
+        return $this->render('entreprises.html.twig', ['tabEntrep' => $tabEntreprises]);
     }
     
     
