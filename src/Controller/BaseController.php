@@ -12,7 +12,7 @@ use App\Entity\Chomeur;
 
 class BaseController extends AbstractController
 {
-    #[Route('/accueil')]
+    #[Route('/accueil', name:'accueil')]
     public function accueil(ManagerRegistry $doctrine)
     {
         $tabOffresEmplois = $doctrine->
