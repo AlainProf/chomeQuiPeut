@@ -13,6 +13,21 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ChomeurController extends AbstractController
 {
+    
+    #[Route('/chomeur_details/{id}', name:'chomeur_details')]
+    public function chomeur_details(ManagerRegistry $doctrine, $id): Response
+    {
+       $em = $doctrine->getManager();
+
+       $chomeur = $em->getRepository(Chomeur::class)->find($id);
+
+       //dd($chomeur);
+
+       return $this->render("detailsChomeur.html.twig", ['chomeur' => $chomeur]);
+
+    }
+
+
     #[Route('/creationChomeurHC')]
     public function creationChomeurHC(ManagerRegistry $doctrine): Response
     {
@@ -38,4 +53,6 @@ class ChomeurController extends AbstractController
         
         return $this->RedirectToRoute('accueil');
     }
+
+
 }
