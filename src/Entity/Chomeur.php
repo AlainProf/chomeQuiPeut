@@ -20,7 +20,7 @@ class Chomeur
     #[ORM\Column(length: 100)]
     private ?string $courriel = null;
 
-    #[ORM\Column(length: 9)]
+    #[ORM\Column(length: 10)]
     private ?string $telephone = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

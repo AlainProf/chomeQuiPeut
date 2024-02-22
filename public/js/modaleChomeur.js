@@ -13,4 +13,4 @@ $(document).ready(function () {
     });
 });
 
-alert("Tout est beau");
+console.log("Tout est beau");
