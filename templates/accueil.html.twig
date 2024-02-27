@@ -13,14 +13,23 @@
 
  {% block body %}
 
+    {#-------------------------------------#}
+    {#     Zone Flash                   #}
+    {#-------------------------------------#}
 
    <section class="row">
-       {% if app.flashes('notice') is defined %}
-          {% for msg in app.flashes('notice') %}
-             <article class="alert alert-info">{{ msg }}</article>
-          {% endfor %}
-       {% endif %}
-   </section>
+      {% if app.flashes('notice') is defined %}
+      {% for msg in app.flashes('notice') %}
+         <article class="alert alert-info">{{ msg }}</article>
+      {% endfor %}
+      {% endif %}
+
+      {% if app.flashes('succes') is defined %}
+         {% for msg in app.flashes('succes') %}
+          <article class="alert alert-success">{{ msg }}</article>
+         {% endfor %}
+      {% endif %}
+</section>
 
    <section class="row">
     {#-------------------------------------#}
@@ -70,8 +79,10 @@
     {#-------------------------------------#}
     <section class="row">
       <a class='col-3' href="creationChomeurHC"><button class='btn btn-info'>Créer chômeur Hard </button></a>
+      <a class='col-3' href="creationChomeur"><button class='btn btn-danger'>Créer chômeur</button></a>
       <a class='col-3' href="creationOffreEmploiHC"><button class='btn btn-info'>Créer offre emploi Hard </button></a>
       <a class='col-3' href="creationEntreprise"><button class='btn btn-danger'>Ajouter entreprise</button></a>
+
       <a class='col-3' href="afficherEntreprise"><button class='btn btn-danger'>Afficher entreprises</button></a>
    </section>
 

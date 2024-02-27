@@ -25,6 +25,19 @@ class ChomeurController extends AbstractController
        return $this->render("detailsChomeur.html.twig", ['chomeur' => $chomeur]);
     }
 
+    #[Route('/creationChomeur')]
+    public function creationChomeur(ManagerRegistry $doctrine): Response
+    {
+        $chom = new Chomeur();
+        $em = $doctrine->getManager();
+
+        //$em->persist($chom);
+        //$em->flush();
+        
+        return $this->RedirectToRoute('accueil');
+    }
+
+
 
     #[Route('/creationChomeurHC')]
     public function creationChomeurHC(ManagerRegistry $doctrine): Response
