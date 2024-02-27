@@ -22,9 +22,7 @@ class ChomeurController extends AbstractController
        $chomeur = $em->getRepository(Chomeur::class)->find($id);
 
        //dd($chomeur);
-
        return $this->render("detailsChomeur.html.twig", ['chomeur' => $chomeur]);
-
     }
 
 

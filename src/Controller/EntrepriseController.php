@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 use App\Entity\OffreEmploi;
 use App\Entity\Entreprise;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,6 +23,25 @@ class EntrepriseController extends AbstractController
         findAll();
 
         return $this->render('entreprises.html.twig', ['tabEntrep' => $tabEntreprises]);
+    }
+
+
+    #[Route('/creationEntreprise')]
+    public function creationEntreprise(ManagerRegistry $doctrine): Response
+    {
+       //Création de l'entité
+       $entreprise = new Entreprise;
+
+       // On crée le formBuilder
+       $formBuilder = $this->createFormBuilder($entreprise)
+                       ->add('nom', TextType::class)
+                       ->add('contact', TextType::class);
+
+       $formulaire = $formBuilder->getForm();
+       
+       return $this->render('ajouterEntreprise.html.twig');
+       
+
     }
     
     
