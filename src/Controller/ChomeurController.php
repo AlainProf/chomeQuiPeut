@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Response, Request};
 use Symfony\Component\Routing\Attribute\Route;
+
+
+use Doctrine\Persistence\ManagerRegistry;
 
 use App\Entity\Chomeur;
 use App\Entity\Adresse;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Form\ChomeurType;
+
  
 
 class ChomeurController extends AbstractController
@@ -26,16 +30,41 @@ class ChomeurController extends AbstractController
     }
 
     #[Route('/creationChomeur')]
-    public function creationChomeur(ManagerRegistry $doctrine): Response
+    public function creationChomeur(ManagerRegistry $doctrine, Request $request): Response
     {
+        ini_set('date.timezone', 'America/New_York');
         $chom = new Chomeur();
-        $em = $doctrine->getManager();
-
-        //$em->persist($chom);
-        //$em->flush();
+        $chom->setDateInscription(new \DateTime);
         
-        return $this->RedirectToRoute('accueil');
-    }
+        $formExterne = $this->createForm(ChomeurType::class, $chom);
+       
+        $formExterne->handleRequest($request);
+        
+        if ($formExterne->isSubmitted())
+        {
+            // Nous somme en mode soumission de form
+            {
+                //Est-ce que les donnée de l'utilsateurs sont valides
+                if ($formExterne->isValid())
+                {
+                     $em = $doctrine->getManager();
+                     $em->persist($chom);
+                     $em->flush();
+ 
+                     $this->addFlash('succes', "Chômeur " . $chom->getNom() . " créé avec succès");
+                     return $this->redirectToRoute('accueil');
+                }
+                else
+                {
+                    // Les données contiennent des erreurs
+                    $this->addFlash('erreur', "Au moins une erreur dans les données fournies");
+                }
+            }
+        }
+     
+        return $this->render('ajouterChomeur.html.twig',
+                          array('formChomeur' => $formExterne->CreateView()));
+}
 
 
 

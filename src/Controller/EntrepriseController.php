@@ -7,10 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-use Symfony\Component\Form\Extension\Core\Type\{TextType, SubmitType};
-
 use App\Entity\OffreEmploi;
 use App\Entity\Entreprise;
+use App\Form\EntrepriseType;
+use App\Form\OffreEmploiType;
+
+
 use Doctrine\Persistence\ManagerRegistry;
 
 class EntrepriseController extends AbstractController
@@ -33,22 +35,18 @@ class EntrepriseController extends AbstractController
        //Création de l'entité
        $entreprise = new Entreprise;
 
-       // On crée le formBuilder, remarquez qu'on passe l'entité à hydrater
-       $formBuilder = $this->createFormBuilder($entreprise)
-                       ->add('nom', TextType::class)
-                       ->add('contact', TextType::class)
-                       ->add('Ajouter', SubmitType::class);
+       $formExterne = $this->createForm(EntrepriseType::class, $entreprise);
 
-       $formulaire = $formBuilder->getForm();
+       //$formulaire = $formBuilder->getForm();
 
-       $formulaire->handleRequest($request);
+       $formExterne->handleRequest($request);
 
-       if ($formulaire->isSubmitted())
+       if ($formExterne->isSubmitted())
        {
            // Nous somme en mode soumission de form
            {
                //Est-ce que les donnée de l'utilsateurs sont valides
-               if ($formulaire->isValid())
+               if ($formExterne->isValid())
                {
                     $em = $doctrine->getManager();
                     $em->persist($entreprise);
@@ -63,17 +61,24 @@ class EntrepriseController extends AbstractController
                }
            }
        }
-
-
-
-       
+      
        return $this->render('ajouterEntreprise.html.twig',
-                                        array('formulaire' => $formulaire->CreateView()));
+                                        array('formulaire' => $formExterne->CreateView()));
        
 
     }
     
     
+    #[Route('/creationOffreEmploi')]
+    public function creationOffreEmploi(ManagerRegistry $doctrine): Response
+    {
+        $oe = new OffreEmploi;
+        $formExterne = $this->createForm(OffreEmploiType::class, $oe);
+
+        return $this->render('ajouterOffreEmploi.html.twig',
+        array('formulaire' => $formExterne->CreateView()));
+
+    }
     
     #[Route('/creationOffreEmploiHC')]
     public function creationOffreEmploiHC(ManagerRegistry $doctrine): Response

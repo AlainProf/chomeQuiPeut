@@ -17,3 +17,8 @@
     color: rgb(15, 14, 5);
     background-color:darkgrey;
 }
+
+.erreur{
+    color: yellow;
+    background-color: red;
+}

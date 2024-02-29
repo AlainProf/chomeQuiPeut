@@ -5,8 +5,8 @@ $(document).ready(function () {
 
         $.get($(this).attr('href'), function (data) {
             $("#modaleChomeur").html(data).dialog({
-                height: 600,
-                width: 200,
+                height: 300,
+                width: 600,
                 modal: false
             });
         });
