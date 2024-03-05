@@ -9,6 +9,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\{SubmitType};
+
 class OffreEmploiType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -17,11 +19,11 @@ class OffreEmploiType extends AbstractType
             ->add('titre')
             ->add('description')
             ->add('salaireAnnuel')
-            ->add('datePublication')
             ->add('entreprise', EntityType::class, [
                 'class' => Entreprise::class,
-'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
+            ->add('publier', SubmitType::class)
         ;
     }
 

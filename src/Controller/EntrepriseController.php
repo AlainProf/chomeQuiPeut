@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{Response, Request};
 use Symfony\Component\Routing\Attribute\Route;
 
 use App\Entity\OffreEmploi;
@@ -70,14 +69,37 @@ class EntrepriseController extends AbstractController
     
     
     #[Route('/creationOffreEmploi')]
-    public function creationOffreEmploi(ManagerRegistry $doctrine): Response
+    public function creationOffreEmploi(ManagerRegistry $doctrine, Request $request): Response
     {
         $oe = new OffreEmploi;
+        $oe->setDatePublication(new \DateTime);
         $formExterne = $this->createForm(OffreEmploiType::class, $oe);
 
+        $formExterne->handleRequest($request);
+        
+        if ($formExterne->isSubmitted())
+        {
+            // Nous somme en mode soumission de form
+            {
+                //Est-ce que les donnée de l'utilsateurs sont valides
+                if ($formExterne->isValid())
+                {
+                     $em = $doctrine->getManager();
+                     $em->persist($oe);
+                     $em->flush();
+ 
+                     $this->addFlash('succes', "Offre d'emploi " . $oe->getTitre() . " créée avec succès");
+                     return $this->redirectToRoute('accueil');
+                }
+                else
+                {
+                    // Les données contiennent des erreurs
+                    $this->addFlash('erreur', "Au moins une erreur dans les données fournies");
+                }
+            }
+        }
         return $this->render('ajouterOffreEmploi.html.twig',
         array('formulaire' => $formExterne->CreateView()));
-
     }
     
     #[Route('/creationOffreEmploiHC')]

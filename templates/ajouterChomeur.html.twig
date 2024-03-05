@@ -17,52 +17,48 @@
     <div>
         <article class="row">
         {{ form_label(formChomeur.nom, 'Nom')}}
-        {{ form_widget(formChomeur.nom, {attr:{'maxlength':'50', 'class':'col-1 form-control'} } ) }}
+        {{ form_widget(formChomeur.nom, {attr:{'class':'form-control courtTexte'} } ) }}
           <section class="erreur">
             {{ form_errors(formChomeur.nom, {attr:{'class':'erreur'} } ) }}
            </section>
         </article>
-        <br>
 
         {{ form_label(formChomeur.courriel, 'Courriel')}}
-        {{ form_widget(formChomeur.courriel)}}
+        {{ form_widget(formChomeur.courriel, {attr:{'class':'form-control courtTexte'} })}}
         {{ form_errors(formChomeur.courriel)}}
-        <br>
 
         {{ form_label(formChomeur.telephone, 'Tél')}}
-        {{ form_widget(formChomeur.telephone)}}
+        {{ form_widget(formChomeur.telephone, {attr:{'class':'form-control courtTexte'} })}}
         {{ form_errors(formChomeur.telephone)}}
-        <br>
     
         {{ form_label(formChomeur.dateNaissance, 'Né le') }}
         {{ form_widget(formChomeur.dateNaissance) }}
         <section class="erreur">
         {{ form_errors(formChomeur.dateNaissance) }}
         </section>
-        <br>
+
     </div> 
 
     <div>
         <h4>Votre adresse:</h4>
         {{ form_label(formChomeur.adresse.numCivique, 'Numéro')}}
-        {{ form_widget(formChomeur.adresse.numCivique)}}
+        {{ form_widget(formChomeur.adresse.numCivique, {attr:{'class':'form-control courtTexte'} })}}
         {{ form_errors(formChomeur.adresse.numCivique)}}
-        <br>
+
         {{ form_label(formChomeur.adresse.rue, 'Rue')}}
-        {{ form_widget(formChomeur.adresse.rue)}}
+        {{ form_widget(formChomeur.adresse.rue, {attr:{'class':'form-control courtTexte'} })}}
         {{ form_errors(formChomeur.adresse.rue)}}
-        <br>
+
         {{ form_label(formChomeur.adresse.ville, 'Ville')}}
-        {{ form_widget(formChomeur.adresse.ville)}}
+        {{ form_widget(formChomeur.adresse.ville, {attr:{'class':'form-control courtTexte'} })}}
         {{ form_errors(formChomeur.adresse.ville)}}
-        <br>
 
     </div>
 
-   
+        
 
 
-  {{ form_end(formChomeur) }}
+     {{ form_end(formChomeur) }}
 
     {# form_end(formChomeur, {'render_rest' :false}) #}
 
