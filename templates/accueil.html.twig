@@ -27,7 +27,7 @@
        <h5>Texte recherché: {{filtreTexte}}</h5>
        <ol>
         {% for chomeur in tabChomeurs %}
-           <li><a class='boutonModal' href="{{ path('chomeur_details', {id: chomeur.id } ) }}">
+           <li><a class='boutonModal lienVisible' href="{{ path('chomeur_details', {id: chomeur.id } ) }}">
             {{ chomeur.nom }}, 
             {{ chomeur.adresse.ville}}</a></li>
         {% endfor %}
@@ -43,7 +43,7 @@
     {#-------------------------------------#}
     <article class="col-8 sectionDroite">
         <h3>Offres d'emplois</h3>
-        <h5>Entreprise fitrée: {{filtreEntrep}}</h5>
+        <h5>Entreprise fitrée: {{filtreEntrepNom}}</h5>
         <ol>
            {% for oe in tabOE %}
               <li>{{ oe.titre }}, {{oe.Entreprise.nom}}</li>

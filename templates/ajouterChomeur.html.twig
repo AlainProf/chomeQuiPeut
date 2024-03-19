@@ -4,11 +4,7 @@
 
   
    <div>
-    {% if app.flashes('erreur') is defined %}
-    {% for msg in app.flashes('erreur') %}
-       <article class="alert alert-danger">{{ msg }}</article>
-    {% endfor %}
-    {% endif %}
+     {{ include('commun/ZoneFlash.html.twig') }}
    </div>
 
 
@@ -52,6 +48,8 @@
         {{ form_label(formChomeur.adresse.ville, 'Ville')}}
         {{ form_widget(formChomeur.adresse.ville, {attr:{'class':'form-control courtTexte'} })}}
         {{ form_errors(formChomeur.adresse.ville)}}
+
+        {{ form_widget(formChomeur.Ajouter, {'attr': {'class':'btn btn-primary'} } ) }}
 
     </div>
 

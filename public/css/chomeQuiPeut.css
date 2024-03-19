@@ -26,3 +26,9 @@
 .courtTexte{
     width:300px;
 }
+
+
+.lienVisible{
+    background-color: rgb(226, 197, 33);
+    color: rgb(73,12,12);
+}

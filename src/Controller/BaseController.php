@@ -18,55 +18,37 @@ class BaseController extends AbstractController
     //
     //-------------------------------------
     #[Route('/', name:'accueil')]
-    public function accueil(ManagerRegistry $doctrine, Request $request)
-    {
-
-        $tabChomeurs = $doctrine->
-                             getManager()->
-                             getRepository(Chomeur::class)->
-                             findAll();
-
-        $tabOffresEmplois = $doctrine->
-                             getManager()->
-                             getRepository(OffreEmploi::class)->
-                            findAll();
-
-        $tabEntrep = $doctrine->
-                            getManager()->
-                            getRepository(Entreprise::class)->
-                            findAll();
+    public function accueil(ManagerRegistry $doctrine, Request $request) :Response
+     {
       
+        $tabChomeurs = $this->TraiterChomeurs( $doctrine, $request);
+        $filtreEntrepNom = "";
+        $tabEntrep = $this->TraiterEntrep($doctrine, $request, $tabOffresEmplois, $filtreEntrepNom  );
 
-        // Récup à partir du $_GET                            
-        $texteRecherche = $request->query->get('texteRecherche');
-        if (isset($texteRecherche)) 
-        {
-            if (strlen($texteRecherche) > 0)
-            {
-                $request->getSession()->set("filtreTexte", $texteRecherche);
-            }
-            else
-            {
-                $texteRecherche = $request->getSession()->get("filtreTexte");
-            }
-            if (empty($texteRecherche))
-            {
-                $request->getSession()->remove("filtreTexte");
-            }
-        }
+        return $this->render('accueil.html.twig', ['tabOE' => $tabOffresEmplois, 
+                                                   'tabChomeurs' => $tabChomeurs,
+                                                   'tabEntrep' => $tabEntrep,
+                                                   'filtreTexte' => $request->getSession()->get('filtreTexte'),
+                                                   'filtreEntrepNom' => $filtreEntrepNom ]);
+    }
 
-        // TODO:   Si je souments un formulaire vide ne remove le filtre texte
+    //--------------------------------------
+    //
+    //--------------------------------------
+    private function TraiterEntrep($doctrine, $request, &$tabOffresEmplois, &$filtreEntrepNom)
+    {
+        // Zone ENTREPRISE                           
+        $tabOffresEmplois = $doctrine->
+            getManager()->
+            getRepository(OffreEmploi::class)->
+            findAll();
 
-        $texteRecherche = $request->getSession()->get("filtreTexte");
+       $tabEntrep = $doctrine->
+            getManager()->
+            getRepository(Entreprise::class)->
+            findAll();
 
-        $tabChomeurs = $this->AppliqueCritere($tabChomeurs, $texteRecherche);
-        if (count($tabChomeurs) == 0)
-        {
-            $this->addFlash("notice", "Aucun chômeur n'a un nom contenant '$texteRecherche'");
-        }
-
-                            
-        // Récup à partir du $_POST                            
+        // Récup à partir du $_POST 
         $IdEntrepFiltree = $request->request->get('filtreEntrep');
         if (isset($IdEntrepFiltree))
         {
@@ -94,16 +76,50 @@ class BaseController extends AbstractController
                 $this->addFlash("notice", "Aucune offre d'emploi pour l'entrepise '" . $entrepFiltre->getNom() . "'");
             }
         }
-
-        // TODO:   Si je choisis "Toutes" $entrepFiltre est null et ça plante
-        //$nomEntrepFiltree = $entrepFiltre->getNom();
-
-        return $this->render('accueil.html.twig', ['tabOE' => $tabOffresEmplois, 
-                                                   'tabChomeurs' => $tabChomeurs,
-                                                   'tabEntrep' => $tabEntrep,
-                                                   'filtreTexte' => $request->getSession()->get('filtreTexte'),
-                                                   'filtreEntrep' => $request->getSession()->get('filtreEntrep')]);
+        if (isset($entrepFiltre))
+        {
+            $filtreEntrepNom = $entrepFiltre->getNom();
+        }
+        return $tabEntrep;
     }
+    
+    //--------------------------------------
+    //
+    //--------------------------------------
+    private function TraiterChomeurs($doctrine, $request)
+    {
+        $tabChomeurs = $doctrine->
+            getManager()->
+            getRepository(Chomeur::class)->
+            findAll();
+
+           // Zonwe TEXTE
+        // Récup à partir du $_GET                            
+        $texteRecherche = $request->query->get('texteRecherche');
+        if (isset($texteRecherche)) 
+        {
+           if (empty($texteRecherche))
+           { 
+             $request->getSession()->remove("filtreTexte");
+           }
+           else
+           {
+              $request->getSession()->set("filtreTexte", $texteRecherche);
+           }
+        }
+
+        $texteRecherche = $request->getSession()->get("filtreTexte");
+        if (strlen($texteRecherche) > 0)
+        {
+            $tabChomeurs = $this->AppliqueCritere($tabChomeurs, $texteRecherche);
+            if (count($tabChomeurs) == 0)
+            {
+                $this->addFlash("notice", "Aucun chômeur n'a un nom contenant '$texteRecherche'");
+            }
+        }
+        return $tabChomeurs;
+    }
+
 
     //--------------------------------------
     //
@@ -111,9 +127,10 @@ class BaseController extends AbstractController
     private function AppliqueCritere($tabChomeurs, $crit)
     {
         $tabTmp = [];
+        $crit = strtolower($crit);
         foreach($tabChomeurs as $unChomeur)
         {
-            if ( strpos( $unChomeur->getNom(), $crit) !== false)
+            if ( strpos( strtolower($unChomeur->getNom()), $crit) !== false)
             {
                 $tabTmp[] = $unChomeur;
             }
