@@ -1,0 +1,20 @@
+{% extends 'base.html.twig'%}
+
+{% block body %}
+   <div>
+     {{ include('commun/ZoneFlash.html.twig') }}
+   </div>
+   <h1>Les Chomeurs inscrits à CQP (et leurs postulations)</h1>
+   <div class="row">
+      {% for chomeur in chomeurs %}
+         <h4>{{chomeur.nom}}</h4>
+         <ul>
+            {% for oe in chomeur.offresEmplois %}
+               <li>{{oe.titre}} ({{oe.salaireAnNuEl}})</li>
+            {% endfor %}
+         </ul>
+         <hr>
+      {% endfor %}
+   </div>
+   <a href="{{ path('accueil') }}"><Button class='btn btn-success m-2'>Accueil</Button></a>
+{% endblock %}

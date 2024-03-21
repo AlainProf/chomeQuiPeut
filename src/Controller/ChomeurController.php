@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\Persistence\ManagerRegistry;
 
 use App\Entity\Chomeur;
+use App\Entity\OffreEmploi;
 use App\Entity\Adresse;
 use App\Form\ChomeurType;
 
@@ -18,6 +19,42 @@ use App\Form\ChomeurType;
 class ChomeurController extends AbstractController
 {
     
+    #[Route('/chomeurs', name:'chomeurs')]
+    public function chomeurs(ManagerRegistry $doctrine): Response
+    {
+        $tabChomeurs = $doctrine->getManager()->getRepository(Chomeur::class)->findAll();
+        return $this->render("chomeurs.html.twig", ['chomeurs' =>$tabChomeurs]);
+    }
+
+
+     #[Route('/postuler', name:'postuler')]
+     public function postuler(ManagerRegistry $doctrine, Request $request): Response
+     {
+        $tabChomeurs = $doctrine->getManager()->getRepository(Chomeur::class)->findAll();
+        $tabOffresEmplois = $doctrine->getManager()->getRepository(OffreEmploi::class)->findAll();
+
+        $soumettre = $request->query->get('soumettre');
+        if (isset($soumettre))
+        {
+            $em = $doctrine->getManager();
+            $idChomeur = $request->query->get('chomeurPostulant');
+            $chomeurPostulant = $em->getRepository(Chomeur::class)->find($idChomeur);
+
+            $idOE = $request->query->get('offreEmploiPostulee');
+            $offreEmploiPostulee = $em->getRepository(OffreEmploi::class)->find($idOE);
+
+            $chomeurPostulant->addOffresEmploi($offreEmploiPostulee);
+            $em->flush();
+
+            $this->addFlash("notice", $chomeurPostulant->getNom() . " a postulé sur " . $offreEmploiPostulee->getTitre());
+
+            return $this->redirectToRoute("chomeurs");
+        }
+
+        return $this->render("postulation.html.twig", ['chomeurs' => $tabChomeurs, 'offresEmplois' => $tabOffresEmplois]);
+    }
+
+
     #[Route('/chomeur_details/{id}', name:'chomeur_details')]
     public function chomeur_details(ManagerRegistry $doctrine, $id): Response
     {

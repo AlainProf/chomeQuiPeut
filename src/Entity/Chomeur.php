@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ChomeurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,6 +36,14 @@ class Chomeur
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
+
+    #[ORM\ManyToMany(targetEntity: OffreEmploi::class, inversedBy: 'chomeurs')]
+    private Collection $offresEmplois;
+
+    public function __construct()
+    {
+        $this->offresEmplois = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,6 +118,31 @@ class Chomeur
     public function setAdresse(?Adresse $adresse): static
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OffreEmploi>
+     */
+    public function getOffresEmplois(): Collection
+    {
+        return $this->offresEmplois;
+    }
+
+    public function addOffresEmploi(OffreEmploi $offresEmploi): static
+    {
+        if (!$this->offresEmplois->contains($offresEmploi)) {
+            $this->offresEmplois->add($offresEmploi);
+            $offresEmploi->addChomeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffresEmploi(OffreEmploi $offresEmploi): static
+    {
+        $this->offresEmplois->removeElement($offresEmploi);
 
         return $this;
     }

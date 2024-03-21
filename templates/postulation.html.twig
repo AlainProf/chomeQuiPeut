@@ -1,0 +1,30 @@
+{% extends 'base.html.twig'%}
+
+{% block body %}
+   <div>
+     {{ include('commun/ZoneFlash.html.twig') }}
+   </div>
+
+  <h1>Postuler sur une offre d'emploi</h1>
+  <form class="row">
+    
+    <section class="col-6">
+       <select name="chomeurPostulant">
+         {% for chomeur in chomeurs %}
+            <option value="{{ chomeur.id }}">{{chomeur.nom}}</option>
+         {% endfor %}
+       </select>        
+    </section>
+
+    <section class="col-6">
+        <select name="offreEmploiPostulee">
+            {% for oe in offresEmplois %}
+               <option value="{{ oe.id }}">{{oe.TITRE}}</option>
+            {% endfor %}
+          </select>        
+    </section>
+    <button class="col-2 btn btn-success" name="soumettre">Postuler</button>
+  </form>
+
+   <a href="{{ path('accueil') }}"><Button class='btn btn-success m-2'>Accueil</Button></a>
+{% endblock %}

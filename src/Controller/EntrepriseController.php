@@ -16,6 +16,16 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class EntrepriseController extends AbstractController
 {
+    
+    #[Route('/chomeursPostulants')]
+    public function chomeursPostulants(ManagerRegistry $doctrine): Response
+    {
+        $tabEntreprises = $doctrine->getManager()->getRepository(Entreprise::class)->findAll();
+
+        return $this->render("chomeursPostulants.html.twig", ["entreprises" => $tabEntreprises]);
+    }
+
+
     #[Route('/afficherEntreprise')]
     public function afficherEntreprise(ManagerRegistry $doctrine): Response
     {

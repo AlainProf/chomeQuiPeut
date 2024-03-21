@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OffreEmploiRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +31,14 @@ class OffreEmploi
     #[ORM\ManyToOne(inversedBy: 'offresEmplois', cascade:['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Entreprise $entreprise = null;
+
+    #[ORM\ManyToMany(targetEntity: Chomeur::class, mappedBy: 'offresEmplois')]
+    private Collection $chomeurs;
+
+    public function __construct()
+    {
+        $this->chomeurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +101,33 @@ class OffreEmploi
     public function setEntreprise(?Entreprise $entreprise): static
     {
         $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chomeur>
+     */
+    public function getChomeurs(): Collection
+    {
+        return $this->chomeurs;
+    }
+
+    public function addChomeur(Chomeur $chomeur): static
+    {
+        if (!$this->chomeurs->contains($chomeur)) {
+            $this->chomeurs->add($chomeur);
+            $chomeur->addOffresEmploi($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChomeur(Chomeur $chomeur): static
+    {
+        if ($this->chomeurs->removeElement($chomeur)) {
+            $chomeur->removeOffresEmploi($this);
+        }
 
         return $this;
     }

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig'%}
+
+{% block body %}
+   <div>
+     {{ include('commun/ZoneFlash.html.twig') }}
+   </div>
+
+   <h1>Les Entreprises, leurs offres d'emploi et les chômeurs qui ont appliqué</h1>
+   <div class="row">
+      {% for entreprise in entreprises %}
+         <h3>{{entreprise.nom}}</h3>
+         <ul>
+            {% for oe in entreprise.offresEmplois %}
+               <li><h4>{{oe.titre}} ({{oe.salaireAnNuEl}})</h4></li>
+               {% for chomeur in oe.chomeurs %} 
+                  <h6>{{ chomeur.nom }} {{ chomeur.telephone }}</h6>
+               {% endfor %}
+            {% endfor %}
+         </ul>
+         <hr>
+      {% endfor %}
+   </div>
+
+   <a href="{{ path('accueil') }}"><Button class='btn btn-success m-2'>Accueil</Button></a>
+{% endblock %}
