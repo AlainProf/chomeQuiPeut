@@ -35,9 +35,13 @@ class OffreEmploi
     #[ORM\ManyToMany(targetEntity: Chomeur::class, mappedBy: 'offresEmplois')]
     private Collection $chomeurs;
 
+    #[ORM\OneToMany(targetEntity: Postulation::class, mappedBy: 'offreEmploiPostulee')]
+    private Collection $postulations;
+
     public function __construct()
     {
         $this->chomeurs = new ArrayCollection();
+        $this->postulations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,6 +131,36 @@ class OffreEmploi
     {
         if ($this->chomeurs->removeElement($chomeur)) {
             $chomeur->removeOffresEmploi($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Postulation>
+     */
+    public function getPostulations(): Collection
+    {
+        return $this->postulations;
+    }
+
+    public function addPostulation(Postulation $postulation): static
+    {
+        if (!$this->postulations->contains($postulation)) {
+            $this->postulations->add($postulation);
+            $postulation->setOffreEmploiPostulee($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostulation(Postulation $postulation): static
+    {
+        if ($this->postulations->removeElement($postulation)) {
+            // set the owning side to null (unless already changed)
+            if ($postulation->getOffreEmploiPostulee() === $this) {
+                $postulation->setOffreEmploiPostulee(null);
+            }
         }
 
         return $this;

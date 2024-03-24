@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Chomeur;
 use App\Entity\OffreEmploi;
 use App\Entity\Adresse;
+use App\Entity\Postulation;
 use App\Form\ChomeurType;
 
  
@@ -42,8 +43,15 @@ class ChomeurController extends AbstractController
 
             $idOE = $request->query->get('offreEmploiPostulee');
             $offreEmploiPostulee = $em->getRepository(OffreEmploi::class)->find($idOE);
+            
+            $postulation = new Postulation;
 
-            $chomeurPostulant->addOffresEmploi($offreEmploiPostulee);
+            $postulation->setDatePostulee(new \DateTime);
+            $postulation->setStatut("initial");
+            $postulation->setChomeurPostulant($chomeurPostulant);
+            $postulation->setOffreEmploiPostulee($offreEmploiPostulee);
+
+            $em->persist($postulation);
             $em->flush();
 
             $this->addFlash("notice", $chomeurPostulant->getNom() . " a postulé sur " . $offreEmploiPostulee->getTitre());

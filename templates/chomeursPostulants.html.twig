@@ -12,8 +12,8 @@
          <ul>
             {% for oe in entreprise.offresEmplois %}
                <li><h4>{{oe.titre}} ({{oe.salaireAnNuEl}})</h4></li>
-               {% for chomeur in oe.chomeurs %} 
-                  <h6>{{ chomeur.nom }} {{ chomeur.telephone }}</h6>
+               {% for postulation in oe.postulations %} 
+                  <h6>{{ postulation.chomeurPostulant.nom }} {{ postulation.chomeurPostulant.adresse.ville }}, {{ postulation.datePostulee |date("Y-m-d H:i:s") }}</h6>
                {% endfor %}
             {% endfor %}
          </ul>

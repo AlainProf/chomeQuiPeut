@@ -9,8 +9,8 @@
       {% for chomeur in chomeurs %}
          <h4>{{chomeur.nom}}</h4>
          <ul>
-            {% for oe in chomeur.offresEmplois %}
-               <li>{{oe.titre}} ({{oe.salaireAnNuEl}})</li>
+            {% for postulation in chomeur.postulations %}
+               <li>{{postulation.offreEmploiPostulee.titre}} ({{postulation.offreEmploiPostulee.salaireAnNuEl}})</li>
             {% endfor %}
          </ul>
          <hr>
