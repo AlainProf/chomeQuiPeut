@@ -7,10 +7,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Symfony\Component\Form\Extension\Core\Type\{SubmitType, TextType, DateType};
+
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Entreprise;
 use App\Entity\OffreEmploi;
 use App\Entity\Chomeur;
+use App\Classe\ConnexionChomeur;
+
+
 
 class BaseController extends AbstractController
 {
@@ -20,12 +25,70 @@ class BaseController extends AbstractController
     #[Route('/', name:'accueil')]
     public function accueil(ManagerRegistry $doctrine, Request $request) :Response
      {
+        $request->getSession()->remove('chomeur_connecte');  
+      
+        $nbChomeurs = $doctrine->getRepository(Chomeur::class)->CountEntities();
+        $nbOE       = $doctrine->getRepository(OffreEmploi::class)->CountEntities();
+        $nbEntrep   = $doctrine->getRepository(Entreprise::class)->CountEntities();
+
+        $connexion = new ConnexionChomeur;
+
+        $formBuilder = $this->CreateFormBuilder($connexion)
+           ->add('nom')
+           ->add('Valider', SubmitType::class);
+
+        $form = $formBuilder->getForm(); 
+        
+        $form->HandleRequest($request); 
+        if ($form->isSubmitted())
+        {
+            if($form->isValid())
+            {
+                $chomeur = $doctrine->getManager()->getRepository(Chomeur::class)->findOneBy(['nom'=>$connexion->getNom()]);
+                if (!empty($chomeur))
+                {
+                    $this->AddFlash("notice", "Bienvenue " . $chomeur->getNom());
+                    $request->getSession()->set('chomeur_connecte', $chomeur->getNom() );
+                    return $this->redirectToRoute('accueil_chomeur');
+                }
+            }
+            $this->AddFlash("erreur", "Erreur de connexion");
+        }
+        return $this->render('accueil.html.twig', ['nbChomeurs' => $nbChomeurs,
+                                                   'nbOE' => $nbOE,
+                                                   'nbEntrep' => $nbEntrep,
+                                                   'form' => $form->CreateView() ]);
+    }
+
+   
+   
+   
+    //-------------------------------------
+    //
+    //-------------------------------------
+    #[Route('/accueil_chomeur', name:'accueil_chomeur')]
+    public function accueil_chomeur(ManagerRegistry $doctrine, Request $request) :Response
+     {
+        $filtreEntrepNom = "";
+        $tabEntrep = $this->TraiterEntrep($doctrine, $request, $tabOffresEmplois, $filtreEntrepNom  );
+
+        return $this->render('accueil_chomeur.html.twig', ['tabOE' => $tabOffresEmplois, 
+                                                   'tabEntrep' => $tabEntrep,
+                                                   'filtreEntrepNom' => $filtreEntrepNom ]);
+    }
+
+    //-------------------------------------
+    //
+    //-------------------------------------
+    #[Route('/ancien_accueil', name:'ancien_accueil')]
+    public function ancien_accueil(ManagerRegistry $doctrine, Request $request) :Response
+     {
       
         $tabChomeurs = $this->TraiterChomeurs( $doctrine, $request);
         $filtreEntrepNom = "";
         $tabEntrep = $this->TraiterEntrep($doctrine, $request, $tabOffresEmplois, $filtreEntrepNom  );
 
-        return $this->render('accueil.html.twig', ['tabOE' => $tabOffresEmplois, 
+        return $this->render('ancien_accueil.html.twig', ['tabOE' => $tabOffresEmplois, 
                                                    'tabChomeurs' => $tabChomeurs,
                                                    'tabEntrep' => $tabEntrep,
                                                    'filtreTexte' => $request->getSession()->get('filtreTexte'),

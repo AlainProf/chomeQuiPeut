@@ -1,0 +1,46 @@
+    {#-------------------------------------#}
+    {#     accueil.html.twig
+    {#-------------------------------------#}
+    {% extends('base.html.twig') %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('css/chomeQuiPeut.css')}}">
+{% endblock %}
+
+ {% block body %}
+
+    {#-------------------------------------#}
+    {#     Zone Flash                   #}
+    {#-------------------------------------#}
+    {{ include('commun/ZoneFlash.html.twig')}}
+   
+   <section class="row">
+   
+    {#-------------------------------------#}
+    {#     Zone Offres d'emplois           #}
+    {#-------------------------------------#}
+    <article class="col-8 sectionDroite">
+        {% if app.session.get('chomeur_connecte') is not null %}
+        <h3>{{app.session.get('chomeur_connecte')}},  voici les offres d'emplois</h3>
+        {% endif %}
+        <h5>Entreprise fitrée: {{filtreEntrepNom}}</h5>
+        <ol>
+           {% for oe in tabOE %}
+              <li>{{ oe.titre }}, {{oe.Entreprise.nom}}</li>
+           {% endfor %}
+        </ol>
+        <form method="POST">
+           <h5>Filtre sur une entreprise:</h5>
+           <select name="filtreEntrep">
+                <option value="0">Toutes</option>
+            {% for uneEntrep in tabEntrep %}
+               <option value="{{uneEntrep.id}}">{{uneEntrep.Nom}}</option>
+            {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-warning">Appliquer</button>
+       </form>
+       <a class="btn btn-success" href="{{path('accueil')}}">Quitter</a>
+    </article>
+   </section>
+  {% endblock %}
+

@@ -12,20 +12,52 @@
   {{ form_start(formChomeur) }}
     <div>
         <article class="row">
-        {{ form_label(formChomeur.nom, 'Nom')}}
+
+           <section class="col-1 titreChampForm ">
+        {{ form_label(formChomeur.nom, 'Nom:')}}
+           </section>
+
+           <section class="col-2 formulaire">
         {{ form_widget(formChomeur.nom, {attr:{'class':'form-control courtTexte'} } ) }}
+           </section>
           <section class="erreur">
             {{ form_errors(formChomeur.nom, {attr:{'class':'erreur'} } ) }}
            </section>
         </article>
 
-        {{ form_label(formChomeur.courriel, 'Courriel')}}
-        {{ form_widget(formChomeur.courriel, {attr:{'class':'form-control courtTexte'} })}}
-        {{ form_errors(formChomeur.courriel)}}
+        
+        <article class="row">
+          <section class="col-1 titreChampForm ">
+           {{ form_label(formChomeur.courriel, 'Courriel:')}}
+          </section>
 
-        {{ form_label(formChomeur.telephone, 'Tél')}}
+          <section class="col-2 formulaire">
+           {{ form_widget(formChomeur.courriel, {attr:{'class':'form-control courtTexte'} })}}
+          </section>
+
+          <section class="erreur">
+            {{ form_errors(formChomeur.courriel)}}
+          </section>
+        </article>
+
+
+        <article class="row">
+          <section class="col-1 titreChampForm ">
+        {{ form_label(formChomeur.telephone, 'Tél:')}}
+          </section>
+
+         <section class="col-2 formulaire">
         {{ form_widget(formChomeur.telephone, {attr:{'class':'form-control courtTexte'} })}}
+         </section>
+
+         <section class="erreur">
         {{ form_errors(formChomeur.telephone)}}
+         </section>
+      </article>
+
+
+
+
     
         {{ form_label(formChomeur.dateNaissance, 'Né le') }}
         {{ form_widget(formChomeur.dateNaissance) }}

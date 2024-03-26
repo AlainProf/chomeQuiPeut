@@ -21,6 +21,12 @@ class OffreEmploiRepository extends ServiceEntityRepository
         parent::__construct($registry, OffreEmploi::class);
     }
 
+    public function CountEntities()
+    {
+        return $this->count([]);
+    }
+
+
 //    /**
 //     * @return OffreEmploi[] Returns an array of OffreEmploi objects
 //     */

@@ -21,6 +21,12 @@ class ChomeurRepository extends ServiceEntityRepository
         parent::__construct($registry, Chomeur::class);
     }
 
+    public function CountEntities()
+    {
+        return $this->count([]);
+    }
+
+
 //    /**
 //     * @return Chomeur[] Returns an array of Chomeur objects
 //     */

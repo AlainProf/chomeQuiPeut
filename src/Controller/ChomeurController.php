@@ -74,6 +74,9 @@ class ChomeurController extends AbstractController
        return $this->render("detailsChomeur.html.twig", ['chomeur' => $chomeur]);
     }
 
+    //-----------------------------------------------
+    //
+    //-----------------------------------------------
     #[Route('/creationChomeur')]
     public function creationChomeur(ManagerRegistry $doctrine, Request $request): Response
     {
@@ -92,6 +95,7 @@ class ChomeurController extends AbstractController
                 //Est-ce que les donnée de l'utilsateurs sont valides
                 if ($formExterne->isValid())
                 {
+                 
                      $em = $doctrine->getManager();
                      $em->persist($chom);
                      $em->flush();
@@ -101,6 +105,7 @@ class ChomeurController extends AbstractController
                 }
                 else
                 {
+                 
                     // Les données contiennent des erreurs
                     $this->addFlash('erreur', "Au moins une erreur dans les données fournies");
                 }

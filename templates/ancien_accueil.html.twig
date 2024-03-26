@@ -1,0 +1,86 @@
+    {#-------------------------------------#}
+    {#     accueil.html.twig
+    {#-------------------------------------#}
+    {% extends('base.html.twig') %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('css/chomeQuiPeut.css')}}">
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{asset('js/modaleChomeur.js') }}"></script>
+{% endblock %}
+
+ {% block body %}
+
+    {#-------------------------------------#}
+    {#     Zone Flash                   #}
+    {#-------------------------------------#}
+    {{ include('commun/ZoneFlash.html.twig')}}
+   
+   <section class="row">
+    {#-------------------------------------#}
+    {#     Zone Chomeurs                   #}
+    {#-------------------------------------#}
+    <article class="col-4 sectionGauche">
+       <h3>Liste des chômeurs</h3>
+       <h5>Texte recherché: {{filtreTexte}}</h5>
+       <ol>
+        {% for chomeur in tabChomeurs %}
+           <li><a class='boutonModal lienVisible' href="{{ path('chomeur_details', {id: chomeur.id } ) }}">
+            {{ chomeur.nom }}, 
+            {{ chomeur.adresse.ville}}</a></li>
+        {% endfor %}
+     </ol>
+     <form action="{{ path('accueil') }}">
+        Texte recherché:<input name="texteRecherche">
+        <button type="submit" class="btn btn-warning">Rechercher</button>
+     </form>
+    </article>
+
+    {#-------------------------------------#}
+    {#     Zone Offres d'emplois           #}
+    {#-------------------------------------#}
+    <article class="col-8 sectionDroite">
+        <h3>Offres d'emplois</h3>
+        <h5>Entreprise fitrée: {{filtreEntrepNom}}</h5>
+        <ol>
+           {% for oe in tabOE %}
+              <li>{{ oe.titre }}, {{oe.Entreprise.nom}}</li>
+           {% endfor %}
+        </ol>
+        <form action="{{ path('accueil') }}" method="POST">
+           <h5>Filtre sur une entreprise:</h5>
+           <select name="filtreEntrep">
+                <option value="0">Toutes</option>
+            {% for uneEntrep in tabEntrep %}
+               <option value="{{uneEntrep.id}}">{{uneEntrep.Nom}}</option>
+            {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-warning">Appliquer</button>
+       </form>
+
+    </article>
+   </section>
+
+    {#-------------------------------------#}
+    {#     Zone de tests                   #}
+    {#-------------------------------------#}
+    <section class="row">
+      <!--a class='col-3' href="creationChomeurHC"><button class='btn btn-info'>Créer chômeur Hard </button></a-->
+      <!--a class='col-3' href="creationOffreEmploiHC"><button class='btn btn-info'>Créer offre emploi Hard </button></a-->
+      <a class='col-2' href="creationChomeur"><button class='btn btn-danger'>Créer chômeur</button></a>
+      <a class='col-2' href="postuler"><button class='btn btn-success'>Postuler</button></a>
+      <a class='col-2' href="chomeurs"><button class='btn btn-success'>Chomeurs</button></a>
+      
+      <a class='col-2' href="creationOffreEmploi"><button class='btn btn-danger'>Créer offre emploi</button></a>
+      <a class='col-2' href="creationEntreprise"><button class='btn btn-danger'>Ajouter entreprise</button></a>
+      <a class='col-2' href="afficherEntreprise"><button class='btn btn-danger'>Afficher entreprises</button></a>
+      <a class='col-2' href="chomeursPostulants"><button class='btn btn-success'>Applications</button></a>
+   </section>
+
+   <section  id="modaleChomeur" title="Détails du chômeur">
+   </section>
+
+   {% endblock %}
+

@@ -32,15 +32,11 @@ class OffreEmploi
     #[ORM\JoinColumn(nullable: false)]
     private ?Entreprise $entreprise = null;
 
-    #[ORM\ManyToMany(targetEntity: Chomeur::class, mappedBy: 'offresEmplois')]
-    private Collection $chomeurs;
-
     #[ORM\OneToMany(targetEntity: Postulation::class, mappedBy: 'offreEmploiPostulee')]
     private Collection $postulations;
 
     public function __construct()
     {
-        $this->chomeurs = new ArrayCollection();
         $this->postulations = new ArrayCollection();
     }
 
@@ -109,32 +105,6 @@ class OffreEmploi
         return $this;
     }
 
-    /**
-     * @return Collection<int, Chomeur>
-     */
-    public function getChomeurs(): Collection
-    {
-        return $this->chomeurs;
-    }
-
-    public function addChomeur(Chomeur $chomeur): static
-    {
-        if (!$this->chomeurs->contains($chomeur)) {
-            $this->chomeurs->add($chomeur);
-            $chomeur->addOffresEmploi($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChomeur(Chomeur $chomeur): static
-    {
-        if ($this->chomeurs->removeElement($chomeur)) {
-            $chomeur->removeOffresEmploi($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Postulation>

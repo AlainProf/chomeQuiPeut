@@ -21,6 +21,12 @@ class EntrepriseRepository extends ServiceEntityRepository
         parent::__construct($registry, Entreprise::class);
     }
 
+    public function CountEntities()
+    {
+        return $this->count([]);
+    }
+
+
 //    /**
 //     * @return Entreprise[] Returns an array of Entreprise objects
 //     */

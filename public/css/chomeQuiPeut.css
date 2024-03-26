@@ -32,3 +32,13 @@
     background-color: rgb(226, 197, 33);
     color: rgb(73,12,12);
 }
+
+.titreChampForm{
+    background-color: grey;
+    color : white;
+    font-size:24px;
+}
+
+.formulaire{
+    background-color: grey;
+}

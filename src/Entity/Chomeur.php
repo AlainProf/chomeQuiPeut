@@ -17,15 +17,16 @@ class Chomeur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
-    #[Assert\Length(min:2, minMessage:'deux caractères minimum')]
-    #[Assert\Length(max:100, maxMessage:'cent caractères maximum')]
+    #[ORM\Column()]
+    #[Assert\Regex(pattern:'/^[a-z]{2,15}$/i', match:true, message:'La taille ou le contenu non conforme')]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column()]
+    #[Assert\Email()]
     private ?string $courriel = null;
 
-    #[ORM\Column(length: 10)]
+    #[ORM\Column()]
+    #[Assert\Regex(pattern:'/^[0-9]{10}$/i', match:true, message:'La taille ou le contenu non conforme')]
     private ?string $telephone = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -36,9 +37,6 @@ class Chomeur
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
-
-    #[ORM\ManyToMany(targetEntity: OffreEmploi::class, inversedBy: 'chomeurs')]
-    private Collection $offresEmplois;
 
     #[ORM\OneToMany(targetEntity: Postulation::class, mappedBy: 'chomeurPostulant')]
     private Collection $postulations;
@@ -126,32 +124,7 @@ class Chomeur
         return $this;
     }
 
-    /**
-     * @return Collection<int, OffreEmploi>
-     */
-    public function getOffresEmplois(): Collection
-    {
-        return $this->offresEmplois;
-    }
-
-    public function addOffresEmploi(OffreEmploi $offresEmploi): static
-    {
-        if (!$this->offresEmplois->contains($offresEmploi)) {
-            $this->offresEmplois->add($offresEmploi);
-            $offresEmploi->addChomeur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOffresEmploi(OffreEmploi $offresEmploi): static
-    {
-        $this->offresEmplois->removeElement($offresEmploi);
-
-        return $this;
-    }
-
-    /**
+     /**
      * @return Collection<int, Postulation>
      */
     public function getPostulations(): Collection
